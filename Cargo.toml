@@ -10,4 +10,4 @@ description = "A highly performant unique identifier generator."
 
 [dependencies]
 lazy_static = "~1.0"
-rand = "*"
+rand = "~0.4"
