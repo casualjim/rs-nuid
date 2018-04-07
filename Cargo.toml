@@ -6,6 +6,7 @@ license = "Apache-2.0"
 repository = "https://github.com/casualjim/rs-nuid.git"
 readme = "README.md"
 keywords = ["nuid","guid","uuid"]
+description = "A highly performant unique identifier generator."
 
 [dependencies]
 lazy_static = "~1.0"
