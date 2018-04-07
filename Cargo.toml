@@ -1,0 +1,8 @@
+[package]
+name = "nuid"
+version = "0.1.0"
+authors = ["Ivan Porto Carrero <ivan@oflanders.co.nz>"]
+
+[dependencies]
+lazy_static = "~1.0"
+rand = "*"
