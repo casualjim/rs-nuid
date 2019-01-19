@@ -16,20 +16,19 @@
 extern crate lazy_static;
 extern crate rand;
 
-use rand::thread_rng;
-use rand::rngs::{OsRng};
 use rand::distributions::Alphanumeric;
+use rand::rngs::OsRng;
+use rand::thread_rng;
 use rand::Rng;
 use std::sync::Mutex;
 
 const BASE: usize = 62;
-const ALPHABET: [u8; BASE as usize] = [b'0', b'1', b'2', b'3', b'4', b'5', b'6', b'7', b'8', b'9',
-                                       b'A', b'B', b'C', b'D', b'E', b'F', b'G', b'H', b'I', b'J',
-                                       b'K', b'L', b'M', b'N', b'O', b'P', b'Q', b'R', b'S', b'T',
-                                       b'U', b'V', b'W', b'X', b'Y', b'Z', b'a', b'b', b'c', b'd',
-                                       b'e', b'f', b'g', b'h', b'i', b'j', b'k', b'l', b'm', b'n',
-                                       b'o', b'p', b'q', b'r', b's', b't', b'u', b'v', b'w', b'x',
-                                       b'y', b'z'];
+const ALPHABET: [u8; BASE as usize] = [
+    b'0', b'1', b'2', b'3', b'4', b'5', b'6', b'7', b'8', b'9', b'A', b'B', b'C', b'D', b'E', b'F',
+    b'G', b'H', b'I', b'J', b'K', b'L', b'M', b'N', b'O', b'P', b'Q', b'R', b'S', b'T', b'U', b'V',
+    b'W', b'X', b'Y', b'Z', b'a', b'b', b'c', b'd', b'e', b'f', b'g', b'h', b'i', b'j', b'k', b'l',
+    b'm', b'n', b'o', b'p', b'q', b'r', b's', b't', b'u', b'v', b'w', b'x', b'y', b'z',
+];
 
 const PRE_LEN: usize = 12;
 const MAX_SEQ: u64 = 839_299_365_868_340_224; // (BASE ^ remaining bytes 22 - 12) == 62^10
@@ -57,19 +56,19 @@ pub struct NUID {
 }
 
 impl Default for NUID {
-
-   fn default() -> Self {
+    fn default() -> Self {
         let mut rng = thread_rng();
         let seq = Rng::gen_range::<u64, u64, _>(&mut rng, 0, MAX_SEQ);
-        let inc = MIN_INC + Rng::gen_range::<u64, u64, _>(&mut rng, 0, MAX_INC+MIN_INC);
+        let inc = MIN_INC + Rng::gen_range::<u64, u64, _>(&mut rng, 0, MAX_INC + MIN_INC);
         let mut n = NUID {
-            pre: [0; PRE_LEN], seq, inc,
+            pre: [0; PRE_LEN],
+            seq,
+            inc,
         };
         n.randomize_prefix();
         n
     }
 }
-
 
 impl NUID {
     /// generate a new `NUID` and properly initialize the prefix, sequential start, and sequential increment.
@@ -100,7 +99,7 @@ impl NUID {
 
         let mut l = seq;
         for i in (PRE_LEN..TOTAL_LEN).rev() {
-            b[i] = ALPHABET[l%BASE];
+            b[i] = ALPHABET[l % BASE];
             l /= BASE;
         }
 
@@ -111,7 +110,7 @@ impl NUID {
     fn reset_sequential(&mut self) {
         let mut rng = thread_rng();
         self.seq = Rng::gen_range::<u64, _, _>(&mut rng, 0, MAX_SEQ);
-        self.inc = MIN_INC + Rng::gen_range::<u64, _, _>(&mut rng, 0, MIN_INC+MAX_INC);
+        self.inc = MIN_INC + Rng::gen_range::<u64, _, _>(&mut rng, 0, MIN_INC + MAX_INC);
     }
 }
 
@@ -181,6 +180,5 @@ mod tests {
         for _ in 0..10_000_000 {
             assert_eq!(set.insert(next()), true);
         }
-
     }
 }
