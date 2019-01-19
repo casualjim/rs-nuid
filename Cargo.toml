@@ -9,5 +9,5 @@ keywords = ["nuid","guid","uuid"]
 description = "A highly performant unique identifier generator."
 
 [dependencies]
-lazy_static = "^1.0"
-rand = "^0.4"
+lazy_static = "^1.2"
+rand = "^0.6"

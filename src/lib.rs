@@ -11,12 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-#[macro_use] extern crate lazy_static;
+//
+// Copied here due to lazy_static version collision.
+#[macro_use]
+extern crate lazy_static;
 extern crate rand;
 
 use rand::thread_rng;
-use rand::{OsRng, Rng};
+use rand::rngs::{OsRng};
+use rand::distributions::Alphanumeric;
+use rand::Rng;
 use std::sync::Mutex;
 
 const BASE: usize = 62;
@@ -29,7 +33,7 @@ const ALPHABET: [u8; BASE as usize] = [b'0', b'1', b'2', b'3', b'4', b'5', b'6',
                                        b'y', b'z'];
 
 const PRE_LEN: usize = 12;
-const MAX_SEQ: u64 = 839299365868340224; // (BASE ^ remaining bytes 22 - 12) == 62^10
+const MAX_SEQ: u64 = 839_299_365_868_340_224; // (BASE ^ remaining bytes 22 - 12) == 62^10
 const MIN_INC: u64 = 33;
 const MAX_INC: u64 = 333;
 const TOTAL_LEN: usize = 22;
@@ -51,29 +55,38 @@ pub struct NUID {
     pre: [u8; PRE_LEN],
     seq: u64,
     inc: u64,
-
 }
 
-impl NUID {
-    /// generate a new `NUID` and properly initialize the prefix, sequential start, and sequential increment.
-    pub fn new() -> NUID {
+impl Default for NUID {
+
+   fn default() -> Self {
+        let mut rng = thread_rng();
+        let seq = Rng::gen_range::<u64, u64, _>(&mut rng, 0, MAX_SEQ);
+        let inc = MIN_INC + Rng::gen_range::<u64, u64, _>(&mut rng, 0, MAX_INC+MIN_INC);
         let mut n = NUID {
-            pre: [0; PRE_LEN],
-            seq: thread_rng().gen_range::<u64>(0, MAX_SEQ),
-            inc: MIN_INC + thread_rng().gen_range(0, MAX_INC+MIN_INC),
+            pre: [0; PRE_LEN], seq, inc,
         };
         n.randomize_prefix();
         n
     }
+}
+
+
+impl NUID {
+    /// generate a new `NUID` and properly initialize the prefix, sequential start, and sequential increment.
+    pub fn new() -> Self {
+        Self::default()
+    }
 
     pub fn randomize_prefix(&mut self) {
         let mut rng = OsRng::new().expect("failed to get crypto random number generator");
-        for (i, n) in rng.gen_iter::<u8>().take(PRE_LEN).enumerate() {
+        for (i, n) in rng.sample_iter(&Alphanumeric).take(PRE_LEN).enumerate() {
             self.pre[i] = ALPHABET[n as usize % BASE];
         }
     }
 
     /// Generate the next `NUID` string.
+    #[allow(clippy::should_implement_trait)]
     pub fn next(&mut self) -> String {
         self.seq += self.inc;
         if self.seq >= MAX_SEQ {
@@ -90,7 +103,7 @@ impl NUID {
         let mut l = seq;
         for i in (PRE_LEN..TOTAL_LEN).rev() {
             b[i] = ALPHABET[l%BASE];
-            l = l/BASE;
+            l /= BASE;
         }
 
         // data is base62 encoded so this can't fail
@@ -99,8 +112,8 @@ impl NUID {
 
     fn reset_sequential(&mut self) {
         let mut rng = thread_rng();
-        self.seq = rng.gen_range::<u64>(0, MAX_SEQ);
-        self.inc = MIN_INC + rng.gen_range::<u64>(0, MIN_INC+MAX_INC);
+        self.seq = Rng::gen_range::<u64, _, _>(&mut rng, 0, MAX_SEQ);
+        self.inc = MIN_INC + Rng::gen_range::<u64, _, _>(&mut rng, 0, MIN_INC+MAX_INC);
     }
 }
 
@@ -167,7 +180,7 @@ mod tests {
     #[test]
     fn unique() {
         let mut set = HashSet::new();
-        for _ in 0..10_000_000 {
+        for _ in 0..10_00_000 {
             assert_eq!(set.insert(next()), true);
         }
 
