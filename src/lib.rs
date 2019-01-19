@@ -85,7 +85,6 @@ impl NUID {
     }
 
     /// Generate the next `NUID` string.
-    #[allow(clippy::should_implement_trait)]
     pub fn next(&mut self) -> String {
         self.seq += self.inc;
         if self.seq >= MAX_SEQ {

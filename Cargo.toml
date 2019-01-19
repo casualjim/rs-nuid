@@ -1,6 +1,6 @@
 [package]
 name = "nuid"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Ivan Porto Carrero <ivan@oflanders.co.nz>"]
 license = "Apache-2.0"
 repository = "https://github.com/casualjim/rs-nuid.git"
