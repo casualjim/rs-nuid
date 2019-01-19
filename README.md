@@ -10,7 +10,7 @@ In Cargo.toml:
 
 ```toml
 [dependencies]
-nuid = "~0.1"
+nuid = "~0.2"
 ```
 
 ## Basic Usage
