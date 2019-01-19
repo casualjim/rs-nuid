@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// Copied here due to lazy_static version collision.
 #[macro_use]
 extern crate lazy_static;
 extern crate rand;
@@ -180,7 +179,7 @@ mod tests {
     #[test]
     fn unique() {
         let mut set = HashSet::new();
-        for _ in 0..10_00_000 {
+        for _ in 0..10_000_000 {
             assert_eq!(set.insert(next()), true);
         }
 
