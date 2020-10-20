@@ -77,7 +77,7 @@ impl NUID {
     }
 
     pub fn randomize_prefix(&mut self) {
-        let mut rng = OsRng::new().expect("failed to get crypto random number generator");
+        let rng = OsRng;
         for (i, n) in rng.sample_iter(&Alphanumeric).take(PRE_LEN).enumerate() {
             self.pre[i] = ALPHABET[n as usize % BASE];
         }
