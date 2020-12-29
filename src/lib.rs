@@ -58,8 +58,9 @@ pub struct NUID {
 impl Default for NUID {
     fn default() -> Self {
         let mut rng = thread_rng();
-        let seq = Rng::gen_range::<u64, u64, _>(&mut rng, 0, MAX_SEQ);
-        let inc = MIN_INC + Rng::gen_range::<u64, u64, _>(&mut rng, 0, MAX_INC + MIN_INC);
+
+        let seq = rng.gen_range(0..MAX_SEQ);
+        let inc = rng.gen_range(MIN_INC..MAX_INC);
         let mut n = NUID {
             pre: [0; PRE_LEN],
             seq,
@@ -109,8 +110,8 @@ impl NUID {
 
     fn reset_sequential(&mut self) {
         let mut rng = thread_rng();
-        self.seq = Rng::gen_range::<u64, _, _>(&mut rng, 0, MAX_SEQ);
-        self.inc = MIN_INC + Rng::gen_range::<u64, _, _>(&mut rng, 0, MIN_INC + MAX_INC);
+        self.seq = rng.gen_range(0..MAX_SEQ);
+        self.inc = rng.gen_range(MIN_INC..MAX_INC)
     }
 }
 
