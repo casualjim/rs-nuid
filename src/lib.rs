@@ -91,8 +91,8 @@ impl NUID {
     pub fn next(&mut self) -> String {
         let mut buffer = [0u8; TOTAL_LEN];
         self.next_into(&mut buffer);
-        // data is base62 encoded so this can't fail
-        String::from_utf8(buffer.to_vec()).unwrap()
+        // data is base62 encoded so this is safe
+        unsafe { String::from_utf8_unchecked(buffer.to_vec()) }
     }
 
     /// Generate the next `NUID` into a byte array.
