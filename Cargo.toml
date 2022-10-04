@@ -1,14 +1,15 @@
 [package]
 edition = "2018"
 name = "nuid"
-version = "0.3.2"
+version = "0.4.0"
 authors = ["Ivan Porto Carrero <ivan@oflanders.co.nz>"]
 license = "Apache-2.0"
 repository = "https://github.com/casualjim/rs-nuid.git"
 readme = "README.md"
 keywords = ["nuid", "guid", "uuid"]
 description = "A highly performant unique identifier generator."
+categories = ["identifier", "uuid"]
 
 [dependencies]
-once_cell = "1.10.0"
+once_cell = "1"
 rand = ">=0.8"

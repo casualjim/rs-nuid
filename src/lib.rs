@@ -60,7 +60,7 @@ impl Default for NUID {
 
         let seq = rng.gen_range(0..MAX_SEQ);
         let inc = rng.gen_range(MIN_INC..MAX_INC);
-        let mut n = NUID {
+        let mut n = Self {
             pre: [0; PRE_LEN],
             seq,
             inc,
@@ -72,6 +72,7 @@ impl Default for NUID {
 
 impl NUID {
     /// generate a new `NUID` and properly initialize the prefix, sequential start, and sequential increment.
+    #[must_use]
     pub fn new() -> Self {
         Self::default()
     }
@@ -117,7 +118,7 @@ impl NUID {
     fn reset_sequential(&mut self) {
         let mut rng = thread_rng();
         self.seq = rng.gen_range(0..MAX_SEQ);
-        self.inc = rng.gen_range(MIN_INC..MAX_INC)
+        self.inc = rng.gen_range(MIN_INC..MAX_INC);
     }
 }
 
@@ -141,13 +142,13 @@ mod tests {
     fn nuid_rollover() {
         let mut n = NUID::new();
         n.seq = MAX_SEQ;
-        let old = n.pre.to_vec().clone();
+        let old = n.pre.to_vec();
         n.next();
         assert_ne!(n.pre.to_vec(), old);
 
         let mut n = NUID::new();
         n.seq = 1;
-        let old = n.pre.to_vec().clone();
+        let old = n.pre.to_vec();
         n.next();
         assert_eq!(n.pre.to_vec(), old);
     }
@@ -185,7 +186,7 @@ mod tests {
     fn unique() {
         let mut set = HashSet::new();
         for _ in 0..10_000_000 {
-            assert_eq!(set.insert(next()), true);
+            assert!(set.insert(next()));
         }
     }
 }
