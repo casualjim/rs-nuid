@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-#[macro_use]
-extern crate lazy_static;
-extern crate rand;
 
+use std::sync::Mutex;
+
+use once_cell::sync::Lazy;
 use rand::distributions::Alphanumeric;
 use rand::rngs::OsRng;
 use rand::thread_rng;
 use rand::Rng;
-use std::sync::Mutex;
 
 const BASE: usize = 62;
 const ALPHABET: [u8; BASE as usize] = [
@@ -38,9 +37,7 @@ const MAX_INC: u64 = 333;
 /// The number of bytes/characters of a NUID.
 pub const TOTAL_LEN: usize = 22;
 
-lazy_static! {
-    static ref GLOBAL_NUID: Mutex<NUID> = Mutex::new(NUID::new());
-}
+static GLOBAL_NUID: Lazy<Mutex<NUID>> = Lazy::new(|| Mutex::new(NUID::new()));
 
 /// Generate the next `NUID` string from the global locked `NUID` instance.
 pub fn next() -> String {
