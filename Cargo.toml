@@ -8,7 +8,7 @@ repository = "https://github.com/casualjim/rs-nuid.git"
 readme = "README.md"
 keywords = ["nuid", "guid", "uuid"]
 description = "A highly performant unique identifier generator."
-categories = ["identifier", "uuid"]
+categories = ["data-structures", "date-and-time", "value-formatting", "encoding", "parsing"]
 
 [dependencies]
 once_cell = "1"
