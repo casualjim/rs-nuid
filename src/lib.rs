@@ -15,7 +15,6 @@
 
 use std::sync::Mutex;
 
-use once_cell::sync::Lazy;
 use rand::distributions::Alphanumeric;
 use rand::rngs::OsRng;
 use rand::thread_rng;
@@ -37,7 +36,7 @@ const MAX_INC: u64 = 333;
 /// The number of bytes/characters of a NUID.
 pub const TOTAL_LEN: usize = 22;
 
-static GLOBAL_NUID: Lazy<Mutex<NUID>> = Lazy::new(|| Mutex::new(NUID::new()));
+static GLOBAL_NUID: Mutex<NUID> = Mutex::new(NUID::new());
 
 /// Generate the next `NUID` string from the global locked `NUID` instance.
 #[allow(clippy::missing_panics_doc)]
@@ -58,25 +57,20 @@ pub struct NUID {
 
 impl Default for NUID {
     fn default() -> Self {
-        let mut rng = thread_rng();
-
-        let seq = rng.gen_range(0..MAX_SEQ);
-        let inc = rng.gen_range(MIN_INC..MAX_INC);
-        let mut n = Self {
-            pre: [0; PRE_LEN],
-            seq,
-            inc,
-        };
-        n.randomize_prefix();
-        n
+        Self::new()
     }
 }
 
 impl NUID {
     /// generate a new `NUID` and properly initialize the prefix, sequential start, and sequential increment.
     #[must_use]
-    pub fn new() -> Self {
-        Self::default()
+    pub const fn new() -> Self {
+        Self {
+            pre: [0; PRE_LEN],
+            // the first call to `next_into` will cause the prefix and sequential to be regenerated
+            seq: MAX_SEQ,
+            inc: 0,
+        }
     }
 
     pub fn randomize_prefix(&mut self) {

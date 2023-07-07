@@ -11,5 +11,4 @@ description = "A highly performant unique identifier generator."
 categories = ["data-structures", "date-and-time", "value-formatting", "encoding", "parsing"]
 
 [dependencies]
-once_cell = "1"
 rand = ">=0.8"
