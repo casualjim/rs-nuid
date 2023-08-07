@@ -11,4 +11,4 @@ description = "A highly performant unique identifier generator."
 categories = ["data-structures", "date-and-time", "value-formatting", "encoding", "parsing"]
 
 [dependencies]
-rand = ">=0.8"
+rand = "0.8"
