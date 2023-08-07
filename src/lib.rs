@@ -21,12 +21,7 @@ use rand::thread_rng;
 use rand::Rng;
 
 const BASE: usize = 62;
-const ALPHABET: [u8; BASE as usize] = [
-    b'0', b'1', b'2', b'3', b'4', b'5', b'6', b'7', b'8', b'9', b'A', b'B', b'C', b'D', b'E', b'F',
-    b'G', b'H', b'I', b'J', b'K', b'L', b'M', b'N', b'O', b'P', b'Q', b'R', b'S', b'T', b'U', b'V',
-    b'W', b'X', b'Y', b'Z', b'a', b'b', b'c', b'd', b'e', b'f', b'g', b'h', b'i', b'j', b'k', b'l',
-    b'm', b'n', b'o', b'p', b'q', b'r', b's', b't', b'u', b'v', b'w', b'x', b'y', b'z',
-];
+const ALPHABET: [u8; BASE] = *b"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 const PRE_LEN: usize = 12;
 const MAX_SEQ: u64 = 839_299_365_868_340_224; // (BASE ^ remaining bytes 22 - 12) == 62^10
