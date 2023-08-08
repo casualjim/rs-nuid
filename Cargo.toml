@@ -9,6 +9,7 @@ keywords = ["nuid", "guid", "uuid"]
 description = "A highly performant unique identifier generator."
 categories = ["data-structures", "date-and-time", "value-formatting", "encoding", "parsing"]
 edition = "2021"
+rust-version = "1.63"
 
 [dependencies]
 rand = "0.8"
