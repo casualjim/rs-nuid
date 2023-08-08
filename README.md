@@ -16,8 +16,6 @@ nuid = "~0.2"
 ## Basic Usage
 
 ```rust
-extern crate nuid;
-
 // Utilize the global locked instance
 nuid := nuid::next();
 
