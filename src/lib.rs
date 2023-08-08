@@ -38,7 +38,7 @@ static GLOBAL_NUID: Mutex<NUID> = Mutex::new(NUID::new());
 
 /// Generate the next `NUID` string from the global locked `NUID` instance.
 #[allow(clippy::missing_panics_doc)]
-#[allow(clippy::must_use_candidate)]
+#[must_use]
 pub fn next() -> NUIDStr {
     GLOBAL_NUID.lock().unwrap().next()
 }
@@ -89,7 +89,7 @@ impl NUID {
 
     /// Generate the next `NUID` string.
     #[allow(clippy::should_implement_trait)]
-    #[allow(clippy::must_use_candidate)]
+    #[must_use]
     pub fn next(&mut self) -> NUIDStr {
         let mut buffer = [0u8; TOTAL_LEN];
 
@@ -98,7 +98,8 @@ impl NUID {
             self.randomize_prefix();
             self.reset_sequential();
         }
-        let seq: usize = self.seq as usize;
+        #[allow(clippy::cast_possible_truncation)]
+        let seq = self.seq as usize;
 
         for (i, n) in self.pre.iter().enumerate() {
             buffer[i] = *n;
@@ -123,12 +124,14 @@ impl NUID {
 
 impl NUIDStr {
     /// Get a reference to the inner string
+    #[must_use]
     pub fn as_str(&self) -> &str {
         // SAFETY: the invariant guarantees the buffer to always contain utf-8 characters
         unsafe { str::from_utf8_unchecked(&self.0) }
     }
 
     /// Extract the inner buffer
+    #[must_use]
     pub fn into_bytes(self) -> [u8; TOTAL_LEN] {
         self.0
     }
@@ -170,13 +173,13 @@ mod tests {
         let mut n = NUID::new();
         n.seq = MAX_SEQ;
         let old = n.pre.to_vec();
-        n.next();
+        let _ = n.next();
         assert_ne!(n.pre.to_vec(), old);
 
         let mut n = NUID::new();
         n.seq = 1;
         let old = n.pre.to_vec();
-        n.next();
+        let _ = n.next();
         assert_eq!(n.pre.to_vec(), old);
     }
 
@@ -191,7 +194,7 @@ mod tests {
         let mut min: u8 = 255;
         let mut max: u8 = 0;
 
-        for nn in ALPHABET.iter() {
+        for nn in &ALPHABET {
             let n = *nn;
             if n < min {
                 min = n;
