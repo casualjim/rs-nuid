@@ -78,4 +78,4 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: --all-targets --all-features -- --warn warnings --warn clippy::all --warn clippy::pedantic --warn clippy::cargo --warn clippy::nursery
+          args: --all-targets --all-features -- --warn warnings --warn clippy::all --warn clippy::pedantic --warn clippy::cargo --warn clippy::nursery --allow clippy::missing_const_for_fn
