@@ -10,14 +10,12 @@ In Cargo.toml:
 
 ```toml
 [dependencies]
-nuid = "~0.2"
+nuid = "0.5"
 ```
 
 ## Basic Usage
 
 ```rust
-extern crate nuid;
-
 // Utilize the global locked instance
 nuid := nuid::next();
 
