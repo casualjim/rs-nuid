@@ -1,6 +1,6 @@
 [package]
 name = "nuid"
-version = "0.5.0"
+version = "0.6.0"
 authors = ["Ivan Porto Carrero <ivan@oflanders.co.nz>"]
 license = "Apache-2.0"
 repository = "https://github.com/casualjim/rs-nuid.git"
@@ -12,4 +12,4 @@ edition = "2021"
 rust-version = "1.63"
 
 [dependencies]
-rand = "0.8"
+rand = "0.9"

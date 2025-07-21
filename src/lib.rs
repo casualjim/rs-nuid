@@ -18,9 +18,7 @@ use std::ops::Deref;
 use std::str;
 use std::sync::Mutex;
 
-use rand::distributions::Alphanumeric;
-use rand::rngs::OsRng;
-use rand::thread_rng;
+use rand::distr::Alphanumeric;
 use rand::Rng;
 
 const BASE: usize = 62;
@@ -81,8 +79,11 @@ impl NUID {
     }
 
     pub fn randomize_prefix(&mut self) {
-        let rng = OsRng;
-        for (i, n) in rng.sample_iter(&Alphanumeric).take(PRE_LEN).enumerate() {
+        for (i, n) in rand::rng()
+            .sample_iter(&Alphanumeric)
+            .take(PRE_LEN)
+            .enumerate()
+        {
             self.pre[i] = ALPHABET[n as usize % BASE];
         }
     }
@@ -116,9 +117,9 @@ impl NUID {
     }
 
     fn reset_sequential(&mut self) {
-        let mut rng = thread_rng();
-        self.seq = rng.gen_range(0..MAX_SEQ);
-        self.inc = rng.gen_range(MIN_INC..MAX_INC);
+        let mut rng = rand::rng();
+        self.seq = rng.random_range(0..MAX_SEQ);
+        self.inc = rng.random_range(MIN_INC..MAX_INC);
     }
 }
 
