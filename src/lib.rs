@@ -19,7 +19,7 @@ use std::str;
 use std::sync::Mutex;
 
 use rand::distr::Alphanumeric;
-use rand::Rng;
+use rand::RngExt;
 
 const BASE: usize = 62;
 const ALPHABET: [u8; BASE] = *b"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
